@@ -1,6 +1,6 @@
 (* Unity Visual Sandbox - Wolfram Cloud API *)
 (* Deployed: 24/11/2025 1:04 pm GMT-6 *)
-(* URL: https://www.wolframcloud.com/obj/chandanbarada2/unity-visual-sandbox *)
+(* URL Example: https://www.wolframcloud.com/obj/YOUR-USERNAME/unity-visual-sandbox *)
 
 CloudDeploy[
   APIFunction[
