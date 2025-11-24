@@ -1,99 +1,78 @@
 function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-slate-950 text-white">
       {/* Navigation */}
-      <nav className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="border-b border-slate-800">
+        <div className="max-w-6xl mx-auto px-6">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">U</span>
-              </div>
-              <span className="text-xl font-bold text-gray-900">Unity Hub</span>
+              <div className="w-6 h-6 bg-gradient-to-br from-blue-400 to-purple-500 rounded"></div>
+              <span className="font-medium">Unity Hub</span>
             </div>
-            <div className="hidden md:flex space-x-8">
-              <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors">Cultural</a>
-              <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors">Showcase</a>
-              <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors">Profile</a>
+            <div className="hidden md:flex space-x-8 text-sm">
+              <a href="#" className="text-slate-400 hover:text-white transition-colors">Cultural</a>
+              <a href="#" className="text-slate-400 hover:text-white transition-colors">Showcase</a>
+              <a href="#" className="text-slate-400 hover:text-white transition-colors">Profile</a>
             </div>
-            <div className="flex space-x-3">
-              <button className="btn-secondary">Sign In</button>
-              <button className="btn-primary">Get Started</button>
-            </div>
+            <button className="bg-white text-slate-900 px-4 py-1.5 rounded-md text-sm font-medium hover:bg-slate-100 transition-colors">
+              Get Started
+            </button>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
-        <div className="text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-            Connecting Cultures,
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-              {" "}Creating Unity
-            </span>
-          </h1>
-          
-          <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Discover cultural connections, create beautiful artifacts, and build meaningful 
-            relationships across the globe. Unity starts with understanding.
-          </p>
+      <main className="max-w-4xl mx-auto px-6 pt-32 pb-24 text-center">
+        <h1 className="text-6xl md:text-7xl font-bold tracking-tight mb-8">
+          Connect
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+            {" "}cultures
+          </span>
+        </h1>
+        
+        <p className="text-lg text-slate-400 mb-12 max-w-2xl mx-auto">
+          Discover connections between cultures, create meaningful artifacts, 
+          and build unity through understanding.
+        </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <button className="btn-primary px-8 py-3 text-lg">
-              Explore Cultures
-            </button>
-            <button className="btn-secondary px-8 py-3 text-lg">
-              View Showcase
-            </button>
-          </div>
-        </div>
-
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mt-20">
-          <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-              <span className="text-2xl">🌍</span>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">Cultural Discovery</h3>
-            <p className="text-gray-600">
-              Explore connections between any two cultures. Discover shared values, 
-              traditions, and surprising similarities.
-            </p>
-          </div>
-
-          <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-              <span className="text-2xl">🎨</span>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">Creative Showcase</h3>
-            <p className="text-gray-600">
-              Generate and share AI-powered artifacts that celebrate unity. 
-              Remix others' creations to build something new together.
-            </p>
-          </div>
-
-          <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-              <span className="text-2xl">👥</span>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">Global Community</h3>
-            <p className="text-gray-600">
-              Connect with like-minded individuals worldwide. Share insights, 
-              collaborate on projects, and build lasting friendships.
-            </p>
-          </div>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <button className="bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-2.5 rounded-lg font-medium hover:opacity-90 transition-opacity">
+            Start Exploring
+          </button>
+          <button className="border border-slate-700 px-6 py-2.5 rounded-lg font-medium hover:border-slate-600 transition-colors">
+            View Demo
+          </button>
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center text-gray-500">
-            <p>&copy; 2025 Unity Hub. Building bridges across cultures.</p>
+      {/* Features - Minimal */}
+      <div className="max-w-4xl mx-auto px-6 pb-24">
+        <div className="grid md:grid-cols-3 gap-12">
+          <div className="text-center">
+            <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+            </div>
+            <h3 className="font-semibold mb-2">Cultural Discovery</h3>
+            <p className="text-sm text-slate-400">Find connections between any cultures</p>
+          </div>
+
+          <div className="text-center">
+            <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <div className="w-4 h-4 bg-purple-500 rounded-full"></div>
+            </div>
+            <h3 className="font-semibold mb-2">Creative Showcase</h3>
+            <p className="text-sm text-slate-400">Generate and share unity artifacts</p>
+          </div>
+
+          <div className="text-center">
+            <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <div className="w-4 h-4 bg-green-500 rounded-full"></div>
+            </div>
+            <h3 className="font-semibold mb-2">Global Network</h3>
+            <p className="text-sm text-slate-400">Connect with like-minded people</p>
           </div>
         </div>
-      </footer>
+      </div>
     </div>
   )
 }
