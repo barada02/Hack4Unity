@@ -4,8 +4,8 @@ from typing import Dict, Optional
 import logging
 from dotenv import load_dotenv
 
-# Load .env file from parent directory
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Load .env file from parent directory (two levels up from tools/)
+parent_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 load_dotenv(os.path.join(parent_dir, '.env'))
 
 logger = logging.getLogger(__name__)
