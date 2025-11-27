@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { artifactApi } from '../services/artifactApi'
 import type { Artifact } from '../types/artifact'
 import { useAuth } from '../contexts/AuthProvider'
+import { ArtifactCard } from '../components/ArtifactCard'
 
 export default function Showcase() {
   const [artifacts, setArtifacts] = useState<Artifact[]>([])
@@ -36,6 +37,14 @@ export default function Showcase() {
     }
   }
 
+  const handleArtifactUpdate = (updatedArtifact: Artifact) => {
+    setArtifacts(prevArtifacts => 
+      prevArtifacts.map(artifact => 
+        artifact._id === updatedArtifact._id ? updatedArtifact : artifact
+      )
+    )
+  }
+
   const filteredArtifacts = artifacts.filter(artifact => {
     if (filter === 'all') return true
     if (filter === 'png') return artifact.format === 'png'
@@ -44,14 +53,6 @@ export default function Showcase() {
       tag.toLowerCase().includes(filter.toLowerCase())
     )
   })
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    })
-  }
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
@@ -176,87 +177,11 @@ export default function Showcase() {
       {!loading && !error && filteredArtifacts.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredArtifacts.map((artifact) => (
-            <div 
-              key={artifact._id} 
-              className="bg-slate-800/50 rounded-xl overflow-hidden backdrop-blur-sm border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 group hover:scale-105 hover:shadow-2xl"
-            >
-              {/* Image */}
-              <div className="aspect-square relative overflow-hidden bg-slate-900">
-                {artifact.imageUrl ? (
-                  <img 
-                    src={artifact.imageUrl} 
-                    alt={artifact.title}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-700 to-slate-800">
-                    <span className="text-4xl opacity-50">🎨</span>
-                  </div>
-                )}
-                
-                {/* Hover Overlay */}
-                <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center p-6">
-                  <h4 className="text-white font-semibold mb-3">Wolfram Expression:</h4>
-                  <div className="bg-slate-900/90 rounded-lg p-3 text-xs text-green-400 font-mono max-h-32 overflow-y-auto">
-                    {artifact.expression}
-                  </div>
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="text-xs text-slate-300">
-                      Format: {artifact.format.toUpperCase()}
-                    </span>
-                    <span className="text-xs text-slate-300">
-                      {formatDate(artifact.createdAt)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card Content */}
-              <div className="p-6">
-                <h3 className="font-semibold text-lg mb-2 group-hover:text-blue-400 transition-colors line-clamp-1">
-                  {artifact.title}
-                </h3>
-                
-                {/* Tags */}
-                {artifact.tags && artifact.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mb-3">
-                    {artifact.tags.slice(0, 3).map((tag, index) => (
-                      <span 
-                        key={index}
-                        className="px-2 py-1 bg-blue-900/30 text-blue-300 text-xs rounded-full"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                    {artifact.tags.length > 3 && (
-                      <span className="px-2 py-1 bg-slate-700 text-slate-300 text-xs rounded-full">
-                        +{artifact.tags.length - 3}
-                      </span>
-                    )}
-                  </div>
-                )}
-
-                {/* Footer */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white">
-                      {artifact.author?.displayName?.[0] || 'U'}
-                    </div>
-                    <span className="text-xs text-slate-400">
-                      {artifact.author?.displayName || 'Anonymous'}
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-3 text-slate-400">
-                    <span className="text-xs flex items-center">
-                      ❤️ {artifact.likesCount || 0}
-                    </span>
-                    <span className="text-xs flex items-center">
-                      💬 {artifact.comments?.length || 0}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ArtifactCard 
+              key={artifact._id}
+              artifact={artifact}
+              onUpdate={handleArtifactUpdate}
+            />
           ))}
         </div>
       )}
