@@ -1,5 +1,21 @@
 const API_BASE_URL = 'http://localhost:3001/api'
 
+// Helper function to get auth headers
+export const getAuthHeaders = (): Record<string, string> => {
+  const token = localStorage.getItem('unity-hub-token')
+  return token ? { Authorization: `Bearer ${token}` } : {}
+}
+
+// Helper function to get headers with content type
+export const getJsonHeaders = (): Record<string, string> => {
+  const token = localStorage.getItem('unity-hub-token')
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (token) {
+    headers.Authorization = `Bearer ${token}`
+  }
+  return headers
+}
+
 export class AuthAPI {
   // Register new user
   static async register(email: string, password: string) {

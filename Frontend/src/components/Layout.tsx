@@ -49,6 +49,18 @@ export default function Layout() {
                 >
                   Showcase
                 </Link>
+                {isAuthenticated && (
+                  <Link 
+                    to="/create" 
+                    className={`transition-colors ${
+                      isActive('/create') 
+                        ? 'text-white' 
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    Create
+                  </Link>
+                )}
               </div>
 
               {/* Auth Section */}
@@ -107,6 +119,16 @@ export default function Layout() {
                 }`}
               >
                 Showcase
+              </Link>
+              <Link 
+                to="/create" 
+                className={`text-sm transition-colors ${
+                  isActive('/create') 
+                    ? 'text-white' 
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                Create
               </Link>
             </div>
           )}

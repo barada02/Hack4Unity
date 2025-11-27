@@ -1,10 +1,12 @@
 import { Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthProvider'
 import Layout from './components/Layout'
+import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/Home'
 import CulturalDiscovery from './pages/CulturalDiscovery'
 import Showcase from './pages/Showcase'
 import Profile from './pages/Profile'
+import CreateArtifact from './pages/CreateArtifact'
 import LoginForm from './components/LoginForm'
 import SignupForm from './components/SignupForm'
 import ProfileSetup from './components/ProfileSetup'
@@ -22,8 +24,21 @@ function App() {
           <Route index element={<Home />} />
           <Route path="cultural" element={<CulturalDiscovery />} />
           <Route path="showcase" element={<Showcase />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="profile/setup" element={<ProfileSetup />} />
+          <Route path="create" element={
+            <ProtectedRoute>
+              <CreateArtifact />
+            </ProtectedRoute>
+          } />
+          <Route path="profile" element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } />
+          <Route path="profile/setup" element={
+            <ProtectedRoute>
+              <ProfileSetup />
+            </ProtectedRoute>
+          } />
         </Route>
       </Routes>
     </AuthProvider>
