@@ -4,6 +4,7 @@ import helmet from 'helmet'
 import dotenv from 'dotenv'
 import Database from './config/database'
 import authRoutes from './routes/auth'
+import artifactRoutes from './routes/artifacts'
 
 // Load environment variables
 dotenv.config()
@@ -29,6 +30,7 @@ app.use(express.urlencoded({ extended: true }))
 
 // Routes
 app.use('/api/auth', authRoutes)
+app.use('/api/artifacts', artifactRoutes)
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -55,6 +57,15 @@ app.get('/api', (req, res) => {
         me: 'GET /api/auth/me',
         profile: 'GET /api/auth/profile',
         updateProfile: 'POST /api/auth/profile'
+      },
+      artifacts: {
+        create: 'POST /api/artifacts',
+        generate: 'POST /api/artifacts/:id/generate',
+        publish: 'POST /api/artifacts/:id/publish',
+        myArtifacts: 'GET /api/artifacts/my-artifacts',
+        published: 'GET /api/artifacts/published',
+        like: 'POST /api/artifacts/:id/like',
+        comment: 'POST /api/artifacts/:id/comments'
       }
     }
   })

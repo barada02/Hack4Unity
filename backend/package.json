@@ -8,7 +8,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "type-check": "tsc --noEmit",
-    "test-auth": "node test-endpoints.js"
+    "test-auth": "node test-endpoints.js",
+    "test-artifacts": "node test-artifacts.js"
   },
   "keywords": [
     "unity",
