@@ -17,8 +17,5 @@ COPY . .
 # Google Cloud Run uses port 8080 by default
 EXPOSE 8080
 
-# Set environment variable for the port
-ENV PORT=8080
-
 # Run the application when the container launches
 CMD ["python", "fastapi_app.py"]
