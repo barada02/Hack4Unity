@@ -46,7 +46,7 @@ async def lifespan(app: FastAPI):
 # Create FastAPI app
 app = FastAPI(
     title="Artifact Agent API",
-    description="Chat with Artifact Agent using Google ADK",
+    description="Ask the Artifact Agent to generate artifacts using Wolfram Language tools.",
     version="1.0.0",
     lifespan=lifespan
 )
@@ -63,7 +63,7 @@ app.add_middleware(
 
 # Request/Response models
 class ChatRequest(BaseModel):
-    prompt: str = Field(..., description="User's message/question for Brad Pitt")
+    prompt: str = Field(..., description="User's message/ask to the Artifact Agent")
     user_id: str = Field(default="default_user", description="Unique identifier for the user")
     session_id: Optional[str] = Field(default=None, description="Session ID for conversation continuity")
 

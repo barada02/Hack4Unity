@@ -189,7 +189,7 @@ if __name__ == "__main__":
         response = asyncio.run(run_single_prompt(
             agent=root_agent,
             prompt="Tell me about your favorite movie role",
-            app_name="bradPittApp"
+            app_name="artifactApp"
         ))
         print(f"Response: {response}")
     except Exception as e:
@@ -202,7 +202,7 @@ if __name__ == "__main__":
         try:
             runner = AgentRunner(
                 agent=root_agent,
-                app_name="bradPittApp",
+                app_name="artifactApp",
                 user_id="test_user"
             )
             response = await runner.run_agent(
