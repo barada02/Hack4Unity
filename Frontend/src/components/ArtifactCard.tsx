@@ -13,7 +13,15 @@ export const ArtifactCard: React.FC<ArtifactCardProps> = ({ artifact, onUpdate }
   const [newComment, setNewComment] = useState('')
   const [isSubmittingComment, setIsSubmittingComment] = useState(false)
   const [isLiking, setIsLiking] = useState(false)
+  const [currentLikeCount, setCurrentLikeCount] = useState(artifact.likesCount || 0)
+  const [isLikedByCurrentUser, setIsLikedByCurrentUser] = useState(artifact.isLikedByUser || false)
   const { isAuthenticated, profile } = useAuth()
+
+  // Sync local state with artifact prop changes
+  React.useEffect(() => {
+    setCurrentLikeCount(artifact.likesCount || 0)
+    setIsLikedByCurrentUser(artifact.isLikedByUser || false)
+  }, [artifact.likesCount, artifact.isLikedByUser])
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -37,22 +45,47 @@ export const ArtifactCard: React.FC<ArtifactCardProps> = ({ artifact, onUpdate }
   const handleLike = async () => {
     if (!isAuthenticated || isLiking) return
     
+    // Store original values for potential revert
+    const originalLikedState = isLikedByCurrentUser
+    const originalCount = currentLikeCount
+    
+    // Optimistic UI update
+    const newLikedState = !isLikedByCurrentUser
+    const newCount = newLikedState 
+      ? currentLikeCount + 1 
+      : Math.max(currentLikeCount - 1, 0)
+    
+    setIsLikedByCurrentUser(newLikedState)
+    setCurrentLikeCount(newCount)
     setIsLiking(true)
+    
     try {
       const response = await artifactApi.toggleLike(artifact.artifactId)
-      if (response.success) {
-        // Update the artifact with new like status
+      if (response.success && response.data) {
+        // Use backend response for accurate count
+        const backendLikedState = response.data.isLiked
+        const backendCount = response.data.likesCount
+        
+        setIsLikedByCurrentUser(backendLikedState)
+        setCurrentLikeCount(backendCount)
+        
+        // Update the parent component's artifact
         const updatedArtifact = {
           ...artifact,
-          isLikedByUser: response.data?.liked || false,
-          likesCount: response.data?.liked 
-            ? (artifact.likesCount || 0) + 1 
-            : Math.max((artifact.likesCount || 0) - 1, 0)
+          isLikedByUser: backendLikedState,
+          likesCount: backendCount
         }
         onUpdate(updatedArtifact)
+      } else {
+        // Revert optimistic update on failure
+        setIsLikedByCurrentUser(originalLikedState)
+        setCurrentLikeCount(originalCount)
       }
     } catch (error) {
       console.error('Error toggling like:', error)
+      // Revert optimistic update on error
+      setIsLikedByCurrentUser(originalLikedState)
+      setCurrentLikeCount(originalCount)
     } finally {
       setIsLiking(false)
     }
@@ -169,13 +202,13 @@ export const ArtifactCard: React.FC<ArtifactCardProps> = ({ artifact, onUpdate }
               onClick={handleLike}
               disabled={!isAuthenticated || isLiking}
               className={`text-xs flex items-center space-x-1 transition-colors ${
-                artifact.isLikedByUser 
+                isLikedByCurrentUser 
                   ? 'text-red-400 hover:text-red-300' 
                   : 'text-slate-400 hover:text-red-400'
               } ${!isAuthenticated ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
             >
-              <span>{artifact.isLikedByUser ? '❤️' : '🤍'}</span>
-              <span>{artifact.likesCount || 0}</span>
+              <span>{isLikedByCurrentUser ? '❤️' : '🤍'}</span>
+              <span>{currentLikeCount}</span>
             </button>
             
             {/* Comment Button */}

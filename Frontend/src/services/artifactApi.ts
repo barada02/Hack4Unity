@@ -47,7 +47,7 @@ export const artifactApi = {
   },
 
   // Like/unlike an artifact
-  toggleLike: async (artifactId: string): Promise<ApiResponse<{ liked: boolean }>> => {
+  toggleLike: async (artifactId: string): Promise<ApiResponse<{ isLiked: boolean, likesCount: number }>> => {
     const response = await fetch(`${API_BASE_URL}/api/artifacts/${artifactId}/like`, {
       method: 'POST',
       headers: getAuthHeaders()
