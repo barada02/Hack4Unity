@@ -1,0 +1,2 @@
+png_Api= https://www.wolframcloud.com/obj/435a0ebe-be1a-48d9-aade-99ff02cc0fa1
+gif_api=https://www.wolframcloud.com/obj/f255781b-d255-4afc-8159-d7151890bf24

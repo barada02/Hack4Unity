@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Wolfram Expression Tester</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+    }
+    input, button {
+      font-size: 16px;
+      padding: 8px;
+    }
+    input {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    button {
+      cursor: pointer;
+    }
+    #preview {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      min-height: 50px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Wolfram Cloud Expression → Image</h2>
+
+  <label>Enter Wolfram Expression:</label>
+  <input id="exprInput" 
+         value="Plot[Sin[x],{x,0,6}]" />
+
+  <button onclick="generateImage()">Generate Image</button>
+
+  <div id="preview">
+    <img id="outputImage" width="600" />
+  </div>
+
+  <script>
+    function generateImage() {
+      let expr = document.getElementById("exprInput").value;
+      let encoded = encodeURIComponent(expr);
+
+      // Replace this with your real API URL:
+      let baseUrl = "https://www.wolframcloud.com/obj/435a0ebe-be1a-48d9-aade-99ff02cc0fa1";
+
+      let finalUrl = baseUrl + "?expr=" + encoded;
+
+      document.getElementById("outputImage").src = finalUrl;
+    }
+  </script>
+
+</body>
+</html>
