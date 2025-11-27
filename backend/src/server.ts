@@ -2,6 +2,8 @@ import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 import dotenv from 'dotenv'
+import Database from './config/database'
+import authRoutes from './routes/auth'
 
 // Load environment variables
 dotenv.config()
@@ -9,6 +11,12 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 3001
 const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173'
+
+// Initialize database connection
+Database.getInstance().connect().catch(error => {
+  console.error('Failed to connect to database:', error)
+  process.exit(1)
+})
 
 // Middleware
 app.use(helmet())
@@ -18,6 +26,9 @@ app.use(cors({
 }))
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true }))
+
+// Routes
+app.use('/api/auth', authRoutes)
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -38,7 +49,13 @@ app.get('/api', (req, res) => {
     description: 'Backend API for Unity Hub - Connect Cultures, Create Unity',
     endpoints: {
       health: '/api/health',
-      // Future endpoints will be listed here
+      auth: {
+        register: 'POST /api/auth/register',
+        login: 'POST /api/auth/login',
+        me: 'GET /api/auth/me',
+        profile: 'GET /api/auth/profile',
+        updateProfile: 'POST /api/auth/profile'
+      }
     }
   })
 })
@@ -61,10 +78,24 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   })
 })
 
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+  console.log('SIGTERM received, shutting down gracefully')
+  await Database.getInstance().disconnect()
+  process.exit(0)
+})
+
+process.on('SIGINT', async () => {
+  console.log('SIGINT received, shutting down gracefully')
+  await Database.getInstance().disconnect()
+  process.exit(0)
+})
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Unity Hub Backend running on port ${PORT}`)
   console.log(`📍 Health check: http://localhost:${PORT}/api/health`)
   console.log(`📋 API info: http://localhost:${PORT}/api`)
+  console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth`)
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`)
 })
