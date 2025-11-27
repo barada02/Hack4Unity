@@ -1,64 +1,75 @@
-(* ======================================= *)
-(*  ARTIFACT GENERATOR API (Production)    *)
-(* ======================================= *)
+generateArtifactRaw[code_String] := Module[
+  {
+    exprHeld, expr, graphic, img, pngBytes, pngB64
+  },
 
-generateArtifact[code_String] := Module[
-  {exprHeld, expr, graphic, img, png, b64},
+  (* 1. Parse code safely (without execution) *)
+  exprHeld = Quiet @ Check[
+    ToExpression[code, InputForm, HoldComplete],
+    HoldComplete[$Failed]
+  ];
 
-  (* 1: Parse WL code safely *)
-  exprHeld = ToExpression[code, InputForm, Hold];
-
-  (* 2: Evaluate inside safe environment *)
-  expr = Check[
+  (* 2. Evaluate inside a restricted sandbox *)
+  expr = Quiet @ Check[
     Block[
       {
-        CloudPut = $Failed &, 
-        CloudGet = $Failed &, 
-        CloudImport = $Failed &, 
-        Run = $Failed &, 
-        ExternalEvaluate = $Failed &, 
-        Import = $Failed &, 
-        Export = $Failed &
+        CloudPut = (Message[CloudPut::blocked]; $Failed)&,
+        CloudGet = (Message[CloudGet::blocked]; $Failed)&,
+        CloudImport = (Message[CloudImport::blocked]; $Failed)&,
+        Run = (Message[Run::blocked]; $Failed)&,
+        ExternalEvaluate = (Message[ExternalEvaluate::blocked]; $Failed)&,
+        Import = (Message[Import::blocked]; $Failed)&,
+        Export = (Message[Export::blocked]; $Failed)&,
+        DeleteFile = (Message[DeleteFile::blocked]; $Failed)&,
+        CreateFile = (Message[CreateFile::blocked]; $Failed)&,
+        Put = (Message[Put::blocked]; $Failed)&,
+        Get = (Message[Get::blocked]; $Failed)&
       },
       ReleaseHold[exprHeld]
     ],
     $Failed
   ];
 
-  (* 3: Convert to image if possible *)
-  graphic = Quiet@Check[expr, $Failed];
-  img = If[Head[graphic] === Graphics || Head[graphic] === Graphics3D,
-    graphic,
-    Graphics[
-      Text[Style[ToString[expr, StandardForm], 14]], 
-      ImageSize -> 400
-    ]
+  (* 3. Normalize to a graphics object *)
+  graphic = Which[
+    Head[expr] === Graphics || Head[expr] === Graphics3D,
+      expr,
+
+    True,
+      Graphics[
+        Text[
+          Style[
+            ToString[expr, StandardForm],
+            14,
+            Black
+          ]
+        ],
+        ImageSize -> 400
+      ]
   ];
 
-  (* 4: Export PNG *)
-  png = ExportString[img, "PNG"];
-  b64 = ExportString[img, "Base64"];
+  (* 4. Export to PNG bytes + Base64 *)
+  pngBytes = Quiet @ Check[ExportByteArray[graphic, "PNG"], {}];
+  pngB64   = Quiet @ Check[ExportString[graphic, {"Base64", "PNG"}], ""];
 
-  (* 5: JSON response *)
+  (* 5. Return pure Wolfram data (NOT JSON) *)
   <|
     "input"        -> code,
-    "outputExpr"   -> ToString[expr, InputForm],
-    "imageBase64"  -> b64,
-    "imagePNG"     -> png,
+    "outputExpr"   -> expr,
+    "graphic"      -> graphic,
+    "imageBase64"  -> pngB64,
+    "imagePNG"     -> pngBytes,
     "success"      -> (expr =!= $Failed),
-    "timestamp"    -> DateString[Now, "ISODateTime"]
+    "timestamp"    -> Now
   |>
-]
 
-(* ======================================= *)
-(*  DEPLOY API                             *)
-(* ======================================= *)
+]
 
 CloudDeploy[
   APIFunction[
     {"code" -> "String"},
-    ExportString[ generateArtifact[#code], "JSON" ] &
+    generateArtifactRaw[#code] &
   ],
-  "api/artifact-generator",
+  "api/wl-raw-artifact",
   Permissions -> "Public"
 ]
