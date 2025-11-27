@@ -16,9 +16,11 @@ MODEL = os.getenv("MODEL", "gemini-2.0-flash-lite")
 AGENT_DESCRIPTION = "An intelligent agent that generates visual artifacts (images, plots, animations, mathematical visualizations) using Wolfram Language through a cloud service. Takes user prompts and creates custom artifacts by converting natural language into Wolfram expressions and generating visual outputs."
 
 
-PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT", "")
-CLOUD_PROJECT_ID = os.getenv("CLOUD_PROJECT_ID", "")
-CLOUD_PROJECT_REGION = os.getenv("CLOUD_PROJECT_REGION", "")
+GOOGLE_CLOUD_PROJECT = os.getenv("GOOGLE_CLOUD_PROJECT", "")
+GOOGLE_CLOUD_LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION", "")
+GOOGLE_CLOUD_BUCKET = os.getenv("GOOGLE_CLOUD_BUCKET", "")
+CLOUD_RUN_SERVICE_URL = os.getenv("CLOUD_RUN_SERVICE_URL", "")
+GOOGLE_GENAI_USE_VERTEXAI = os.getenv("GOOGLE_GENAI_USE_VERTEXAI", "FALSE")
 
 # Wolfram Artifact Generation Instructions
 WOLFRAM_INSTRUCTION = """
