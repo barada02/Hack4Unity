@@ -5,8 +5,9 @@ Configuration for the Lead Manager Agent.
 import os
 from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
+# Load environment variables from parent directory
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+load_dotenv(os.path.join(parent_dir, '.env'))
 
 # Model configuration
 MODEL = os.getenv("MODEL", "gemini-2.0-flash-lite")
